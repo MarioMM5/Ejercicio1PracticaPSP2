@@ -9,7 +9,7 @@ public class Transportista implements Runnable{
     private final Almazara almazara;
     private final String tipo;
 
-    public Transportista(ThreadGroup threadGroup, Almazara almazara, String tipo) {
+    public Transportista(Almazara almazara, String tipo) {
         this.almazara = almazara;
         this.tipo = tipo;
     }

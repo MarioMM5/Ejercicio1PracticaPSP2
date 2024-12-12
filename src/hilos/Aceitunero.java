@@ -8,7 +8,7 @@ public class Aceitunero implements Runnable{
 
     private final Almazara almazara;
 
-    public Aceitunero(Almazara almazara, ThreadGroup threadGroup) {
+    public Aceitunero(Almazara almazara) {
         this.almazara = almazara;
     }
 
