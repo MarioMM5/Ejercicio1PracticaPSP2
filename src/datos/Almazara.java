@@ -76,10 +76,6 @@ public class Almazara {
         System.out.println("Esperas transportistas de orujo: " + esperasTransportistasOrujo);
     }
 
-    public void finalizar() {
-        finalizado = true;
-        notifyAll();
-    }
 }
 
 
