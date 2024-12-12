@@ -28,9 +28,6 @@ public class Main {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        if (transportistas.activeCount() == 0 || aceituneros.activeCount() == 0) {
-            almazara.finalizar();
-        }
 
         almazara.mostrarEstadoFinal();
         System.exit(0);

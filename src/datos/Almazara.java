@@ -67,7 +67,7 @@ public class Almazara {
         }
     }
 
-    public synchronized void mostrarEstadoFinal() {
+    public void mostrarEstadoFinal() {
         System.out.println("\nEstado final:");
         System.out.println("Depósito de aceite: " + depositoAceite + " kg.");
         System.out.println("Tanque de orujo: " + tanqueOrujo + " kg.");
