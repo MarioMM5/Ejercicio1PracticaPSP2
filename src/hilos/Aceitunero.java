@@ -4,9 +4,10 @@ import datos.Almazara;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Aceitunero implements Runnable{
+public class Aceitunero implements Runnable {
 
     private final Almazara almazara;
+    private boolean ejecucion = true;
 
     public Aceitunero(Almazara almazara) {
         this.almazara = almazara;
@@ -15,13 +16,15 @@ public class Aceitunero implements Runnable{
 
     @Override
     public void run() {
-        for (int i = 0; i < 10; i++) {
-            int peso = ThreadLocalRandom.current().nextInt(100,301);
-            almazara.entregarAceituna(peso);
-            try{
-                Thread.sleep(ThreadLocalRandom.current().nextInt(150,500));
+        while (this.ejecucion) {
+            try {
+                for (int i = 0; i < 10; i++) {
+                    int peso = ThreadLocalRandom.current().nextInt(100, 301);
+                    Thread.sleep(ThreadLocalRandom.current().nextInt(150, 500));
+                    almazara.entregarAceituna(peso);
+                }
             } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                this.ejecucion = false;
             }
         }
     }

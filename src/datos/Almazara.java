@@ -9,63 +9,63 @@ public class Almazara {
     private int depositoAceite = 0;
     private int tanqueOrujo = 0;
 
-    private boolean finalizado = false;
     private int esperasAceituneros = 0;
     private int esperasTransportistasAceite = 0;
     private int esperasTransportistasOrujo = 0;
 
     public synchronized void entregarAceituna(int peso) {
-        if (!finalizado) {
-            int aceite = (int) (peso * 0.7);
-            int orujo = peso - aceite;
 
-            while (depositoAceite + aceite > CAPACIDAD_ACEITE && !finalizado || tanqueOrujo + orujo > CAPACIDAD_ORUJO && !finalizado) {
-                esperasAceituneros++;
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+        int aceite = (int) (peso * 0.7);
+        int orujo = peso - aceite;
+
+        while (depositoAceite + aceite > CAPACIDAD_ACEITE || tanqueOrujo + orujo > CAPACIDAD_ORUJO) {
+            esperasAceituneros++;
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
             }
-            depositoAceite += aceite;
-            tanqueOrujo += orujo;
-            System.out.println("Aceitunero entregó " + peso + " kg (Aceite: " + aceite + ", Orujo: " + orujo + ", Deposito Aceituna:  " + depositoAceite + ", Tanque Orujo:  " + tanqueOrujo + "  ).");
-            notifyAll();
         }
+        depositoAceite += aceite;
+        tanqueOrujo += orujo;
+        System.out.println("Aceitunero entregó " + peso + " kg (Aceite: " + aceite + ", Orujo: " + orujo + ", Deposito Aceituna:  " + depositoAceite + ", Tanque Orujo:  " + tanqueOrujo + "  ).");
+        notifyAll();
     }
 
+
     public synchronized void cargarTransporte(String tipo, int cantidad) {
-        if (!finalizado) {
+
             if (tipo.equals("aceite")) {
-                while (depositoAceite < cantidad && !finalizado) {
+                while (depositoAceite < cantidad) {
                     esperasTransportistasAceite++;
                     try {
                         wait();
-                    } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                    } catch (InterruptedException var5) {
+                        Thread.currentThread().interrupt();
+                        return;
                     }
                 }
-                if (!finalizado) {
-                    depositoAceite -= cantidad;
-                    System.out.println("Transportista cargó " + cantidad + " kg de aceite.");
-                }
+                depositoAceite -= cantidad;
+                System.out.println("Transportista cargó " + cantidad + " kg de aceite.");
             } else if (tipo.equals("orujo")) {
-                while (tanqueOrujo < cantidad && !finalizado) {
+                while (tanqueOrujo < cantidad) {
                     esperasTransportistasOrujo++;
+                    System.out.println("esperando orujo");
                     try {
                         wait();
                     } catch (InterruptedException e) {
-                        throw new RuntimeException(e);
+                        Thread.currentThread().interrupt();
+                        return;
                     }
                 }
-                if (!finalizado) {
-                    tanqueOrujo -= cantidad;
-                    System.out.println("Transportista cargó " + cantidad + " kg de orujo.");
-                }
+                tanqueOrujo -= cantidad;
+                System.out.println("Transportista cargó " + cantidad + " kg de orujo.");
             }
-            notifyAll();
+
+        notifyAll();
         }
-    }
+
 
     public void mostrarEstadoFinal() {
         System.out.println("\nEstado final:");

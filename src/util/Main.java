@@ -26,10 +26,12 @@ public class Main {
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            Thread.currentThread().interrupt();
         }
 
+        aceituneros.interrupt();
+        transportistas.interrupt();
         almazara.mostrarEstadoFinal();
-        System.exit(0);
+
     }
 }
